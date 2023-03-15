@@ -1,7 +1,6 @@
 package com.example.taskapp.ui.onBoard
 
-import android.content.Intent
-import android.graphics.ColorSpace.Model
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,19 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.example.taskapp.R
-import com.example.taskapp.databinding.FragmentOnBoardBinding
 import com.example.taskapp.databinding.FragmentOnBoardPageBinding
+import com.example.taskapp.utils.Preferences
 
 
-class OnBoardPageFragment : Fragment() {
+@Suppress("DEPRECATION")
+class OnBoardPageFragment(
+    private var listenerScip: () -> Unit,
+    private  var listenerNext: () -> Unit
+) : Fragment() {
     private lateinit var binding: FragmentOnBoardPageBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentOnBoardPageBinding.inflate(inflater, container, false)
         initViews()
         initListener()
@@ -31,13 +32,14 @@ class OnBoardPageFragment : Fragment() {
 
     private fun initListener() {
         binding.btnNext.setOnClickListener {
-
+            listenerNext.invoke()
         }
-        binding.btnSkip.setOnClickListener{
-            
+        binding.btnSkip.setOnClickListener {
+            listenerScip.invoke()
         }
         binding.btnStart.setOnClickListener {
-            findNavController().navigate(R.id.navigation_home)
+            findNavController().navigateUp()
+            Preferences(requireContext()).board = true
         }
     }
 

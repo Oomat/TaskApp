@@ -1,21 +1,24 @@
 package com.example.taskapp.ui.profile
 
-import android.app.Activity
-import android.app.Instrumentation.ActivityResult
+
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
+import com.example.taskapp.Extenssions.loadImage
+import com.example.taskapp.Extenssions.showName
+import com.example.taskapp.Extenssions.showToast
 import com.example.taskapp.databinding.FragmentProfileBinding
+import com.example.taskapp.utils.Preferences
 
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
+
+
 
 
     private val selectImageFromGalleryResult =
@@ -23,11 +26,15 @@ class ProfileFragment : Fragment() {
     uri?.let{
         binding.image.setImageURI(uri)
 
-        Glide
-            .with(requireContext())
-            .load(uri)
-            .circleCrop()
-            .into(binding.image )
+
+
+        showToast("Успешно")
+        binding.image.loadImage(uri.toString())
+        binding.etName.showName("sadbjbh")
+
+        Preferences(requireContext()).imgProfile = uri.toString()
+        Preferences(requireContext()).etName.toString()
+
 
     }
         }
@@ -35,9 +42,9 @@ class ProfileFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup?,
+         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentProfileBinding.inflate(inflater,container,false)
         initViews()
         initListener()
@@ -50,9 +57,10 @@ class ProfileFragment : Fragment() {
 
         }
 
+
     }
 
     private fun initViews() {
-
+        binding.image.loadImage(Preferences(requireContext()).imgProfile.toString())
     }
 }

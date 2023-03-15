@@ -10,8 +10,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
+import com.example.taskapp.App
 import com.example.taskapp.R
 import com.example.taskapp.databinding.FragmentNewTaskBinding
+import com.example.taskapp.ui.home.TaskModel
 
 
 class NewTaskFragment : Fragment() {
@@ -27,23 +29,27 @@ class NewTaskFragment : Fragment() {
     }
 
     private fun initListener() {
-        binding.btnSave.setOnClickListener{
-            setFragmentResult(TASK_KEY, bundleOf(
-                "title" to binding.etTitle.text.toString(),
-                "desc" to binding.etDescription.text.toString()
-            ))
+        binding.btnSave.setOnClickListener {
+            /* setFragmentResult(TASK_KEY, bundleOf(
+                 "title" to binding.etTitle.text.toString(),
+                 "desc" to binding.etDescription.text.toString()
+             ))*/
+            App.db.dao().insert(
+                TaskModel(
+                    title = binding.etTitle.text.toString(),
+                    desc = binding.etDescription.text.toString()
+                )
+            )
+            Log.e("ololo", "Room inserted successfully: ")
             findNavController().navigateUp()
         }
     }
 
     private fun initViews() {
-//        setFragmentResultListener(TASK_KEY,){_,bundle ->
-//            Log.e("ololo", "initViews: "
-//                    +bundle.getString("title")+
-//                    bundle.getString("desc") )
-//}
+
     }
-    companion object{
+
+    companion object {
         const val TASK_KEY = "new task"
     }
 
